@@ -12,7 +12,7 @@ pr = None
 
 # Modelni yuklashga harakat qilish
 try:
-    with open("C:\\Modul 2 suniy\\tweets_sentiment.pkl", "rb") as fl:
+    with open("tweets_sentiment.pkl", "rb") as fl:
         pr = pickle.load(fl)
 except Exception as e:
     st.error(f"Modelni yuklashda xato: {e}")
