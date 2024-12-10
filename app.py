@@ -1,5 +1,7 @@
 import streamlit as st
 import pickle
+from sklearn.feature_extraction.text import TfidfVectorizer
+import pandas as pd
 
 st.header("Sentiment")
 page_description = """Bu model so'zlarni sentimentga ajratadi"""
@@ -7,27 +9,36 @@ st.markdown(page_description)
 
 matn = st.text_input("Ingliz tilida so'z kiriting:")
 
-# `pr` o'zgaruvchisini dastlabki qiymat bilan belgilash
-pr = None
+# Modelni yuklash
+with open("/Users/amir/Desktop/Suniy2/tweets_sentiment (1).pkl", "rb") as fl:
+    pr = pickle.load(fl)
 
-# Modelni yuklashga harakat qilish
-try:
-    with open("tweets_sentiment.pkl", "rb") as fl:
-        pr = pickle.load(fl)
-except Exception as e:
-    st.error(f"Modelni yuklashda xato: {e}")
+# Matnli ma'lumotlar
+data = {"text": [matn]}
+
+
+# Pandas DataFrame
+df = pd.DataFrame(data)
+
+# TF-IDF Vectorizer obyekti
+tfidf_vectorizer = TfidfVectorizer()
+
+# Matnni vektorizatsiya qilish
+tfidf_vectors = tfidf_vectorizer.fit_transform(df['text'])
+
 
 if st.button("Tekshirish"):
-    if pr is not None:  # Model yuklanganligini tekshirish
-        if matn:
-            sentiment_natija = pr.predict([[matn]])[0]  # Natijani olish
-            if sentiment_natija == 'negative':
-                st.write("**Natija:** Negativ!")
-            elif sentiment_natija == 'positive':
-                st.write("**Natija:** Positive!")
-            else:
-                st.write("**Natija:** Neutral!")
+    if matn:  # Matn kiritilganligini tekshirish
+        sentiment_natija = pr.predict(tfidf_vectors)
+        if sentiment_natija == 'negative':
+            st.write("Negativ!")
+        elif sentiment_natija == 'positive':
+            st.write("Positive!")
         else:
-            st.warning("Iltimos, matn kiriting.")
+            st.write('Neutral!')
     else:
-        st.warning("Model yuklanmagan, iltimos, qayta tekshiring.")
+        st.warning("Iltimos, matn kiriting.")
+
+
+
+
