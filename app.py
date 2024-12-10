@@ -10,7 +10,7 @@ st.markdown(page_description)
 matn = st.text_input("Ingliz tilida so'z kiriting:")
 
 # Modelni yuklash
-with open("/Users/amir/Desktop/Suniy2/tweets_sentiment (1).pkl", "rb") as fl:
+with open("tweets_sentiment.pkl", "rb") as fl:
     pr = pickle.load(fl)
 
 # Matnli ma'lumotlar
