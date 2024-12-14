@@ -10,8 +10,12 @@ st.markdown(page_description)
 matn = st.text_input("Ingliz tilida so'z kiriting:")
 
 # Modelni yuklash
-with open("tweets_sentiment.pkl", "rb") as fl:
-    pr = pickle.load(fl)
+# Model va TF-IDF vektorizatorni birga yuklash
+with open("tweets_sentiment (1).pkl", "rb") as fl:
+    pr, tfidf_vectorizer = pickle.load(fl)
+
+# Yangi matnni vektorizatsiya qilish
+tfidf_vectors = tfidf_vectorizer.transform(df['text'])
 
 # Matnli ma'lumotlar
 data = {"text": [matn]}
